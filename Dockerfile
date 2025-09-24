@@ -33,7 +33,8 @@ ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist
 
 # Kopiere die package-Dateien, um die Produktions-Abhängigkeiten zu installieren
-COPY --from=build /app/package.json ./package-lock.json ./
+# KORRIGIERTE ZEILE: Hier werden jetzt beide Dateien korrekt aus der "build"-Stufe kopiert.
+COPY --from=build /app/package.json /app/package-lock.json ./
 
 # Installiere NUR die Produktions-Abhängigkeiten (ohne devDependencies)
 RUN npm ci --omit=dev
@@ -43,3 +44,4 @@ EXPOSE 1337
 
 # Der Befehl, um die Anwendung zu starten
 CMD ["npm", "run", "start"]
+
