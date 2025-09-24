@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "termins",
+  "info": {
+    "singularName": "termin",
+    "pluralName": "termins",
+    "displayName": "Termin",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Titel": {
+      "type": "string"
+    },
+    "Beschreibung": {
+      "type": "text"
+    },
+    "Datum": {
+      "type": "datetime"
+    },
+    "Ort": {
+      "type": "string"
+    }
+  }
+}

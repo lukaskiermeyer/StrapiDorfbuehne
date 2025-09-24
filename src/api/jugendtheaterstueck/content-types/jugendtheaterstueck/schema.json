@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "jugendtheaterstuecke",
+  "info": {
+    "singularName": "jugendtheaterstueck",
+    "pluralName": "jugendtheaterstuecke",
+    "displayName": "Jugendtheaterstück",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Titel": {
+      "type": "string"
+    },
+    "Bilder": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Jahr": {
+      "type": "integer"
+    },
+    "Titelbild": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Beschreibung": {
+      "type": "richtext"
+    }
+  }
+}

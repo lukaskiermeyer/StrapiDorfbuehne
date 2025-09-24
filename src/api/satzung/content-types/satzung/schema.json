@@ -1,0 +1,24 @@
+{
+  "kind": "singleType",
+  "collectionName": "satzungs",
+  "info": {
+    "singularName": "satzung",
+    "pluralName": "satzungs",
+    "displayName": "Satzung"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Satzung": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
