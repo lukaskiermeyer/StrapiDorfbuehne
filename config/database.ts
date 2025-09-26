@@ -1,8 +1,29 @@
 const path = require('path');
 
 module.exports = ({ env }) => {
-  // Lokale SQLite Konfiguration für die Entwicklung
-  if (env('NODE_ENV') === 'development') {
+  // Überprüfen, ob eine DATABASE_URL vorhanden ist (wird von Render, Neon etc. oft bereitgestellt)
+  if (env('DATABASE_URL')) {
+    const { host, port, database, user, password } = require('pg-connection-string').parse(env('DATABASE_URL'));
+    return {
+      connection: {
+        client: 'postgres',
+        connection: {
+          host,
+          port,
+          database,
+          user,
+          password,
+          ssl: { rejectUnauthorized: false }, // Wichtig für die meisten Cloud-DBs
+        },
+        debug: false,
+      },
+    };
+  }
+
+  // Fallback auf die einzelnen Umgebungsvariablen
+  const client = env('DATABASE_CLIENT', 'sqlite');
+
+  if (client === 'sqlite') {
     return {
       connection: {
         client: 'sqlite',
@@ -14,22 +35,20 @@ module.exports = ({ env }) => {
     };
   }
 
-  // Production-Konfiguration für Postgres (Cloud Run, Supabase etc.)
+  // Konfiguration für Postgres basierend auf einzelnen Variablen
   return {
     connection: {
       client: 'postgres',
       connection: {
-        host: env('DATABASE_HOST'),
+        host: env('DATABASE_HOST', '127.0.0.1'),
         port: env.int('DATABASE_PORT', 5432),
-        database: env('DATABASE_NAME'),
-        user: env('DATABASE_USERNAME'),
-        password: env('DATABASE_PASSWORD'),
-        // SSL-Einstellungen für Cloud-Datenbanken wie Supabase
-        ssl: {
-          rejectUnauthorized: env.bool('DATABASE_SSL_SELF_SIGNED', false),
-        },
+        database: env('DATABASE_NAME', 'strapi'),
+        user: env('DATABASE_USERNAME', 'strapi'),
+        password: env('DATABASE_PASSWORD', 'strapi'),
+        ssl: env.bool('DATABASE_SSL', false) ? { rejectUnauthorized: false } : false,
       },
       debug: false,
     },
   };
 };
+
