@@ -1,5 +1,5 @@
 # Definiert die Laufzeitumgebung. Wir verwenden Node.js Version 18.
-runtime: nodejs18
+runtime: nodejs20
 
 # Gibt an, welche Instanzgröße verwendet werden soll. F2 ist eine gute und günstige Wahl für den Anfang.
 instance_class: F2
