@@ -3,3 +3,6 @@ steps:
   - name: "gcr.io/cloud-builders/gcloud"
     # ... um den Befehl 'gcloud app deploy' auszuführen, der alles automatisch macht.
     args: ["app", "deploy"]
+
+options:
+    logging: CLOUD_LOGGING_ONLY
