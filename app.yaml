@@ -6,3 +6,29 @@ instance_class: F2
 
 # Der Befehl, der ausgeführt wird, um deine Anwendung im Produktionsmodus zu starten.
 entrypoint: npm run start
+
+env_variables:
+  # Host und Port, auf dem die App innerhalb von App Engine lauschen soll.
+  # App Engine gibt den PORT automatisch vor. HOST muss 0.0.0.0 sein.
+  HOST: "0.0.0.0"
+
+  # Datenbank-Verbindung zu Neon
+  DATABASE_CLIENT: "postgres"
+  DATABASE_HOST: "ep-purple-resonance-agdw2czf-pooler.c-2.eu-central-1.aws.neon.tech"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "neondb"
+  DATABASE_USERNAME: "neondb_owner"
+  DATABASE_PASSWORD: "npg_fRFNg6z5muUn"
+  DATABASE_SSL: "true"
+
+  # Strapi Security Keys
+  APP_KEYS: "JUnkc2S8CjhZsq3WvA6taQ==,Xa4jhNXGj3QmTGycHDF15Q==,KYGg4RnuDR4CUVRa/qU4xQ==,8sL53fwtvlt29XZRvSDN3Q=="
+  API_TOKEN_SALT: "tQx1QKOBgZldXacVeKS78A=="
+  ADMIN_JWT_SECRET: "Jl6kkNzfVgNF568NrAF1BQ=="
+  JWT_SECRET: "yJ1kSNEPYUKXz4Udp5Nu1g=="
+  TRANSFER_TOKEN_SALT: "wQyTNpe3QsjBgiAMC6inLA=="
+
+  # Cloudinary Keys
+  CLOUDINARY_NAME: "dmnsc9ued"
+  CLOUDINARY_KEY: "363842264292778"
+  CLOUDINARY_SECRET: "7KYd0Tcvhycy6pfxEGdYVl5Su2A"
