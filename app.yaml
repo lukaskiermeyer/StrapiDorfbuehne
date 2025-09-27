@@ -1,0 +1,8 @@
+# Definiert die Laufzeitumgebung. Wir verwenden Node.js Version 18.
+runtime: nodejs18
+
+# Gibt an, welche Instanzgröße verwendet werden soll. F2 ist eine gute und günstige Wahl für den Anfang.
+instance_class: F2
+
+# Der Befehl, der ausgeführt wird, um deine Anwendung im Produktionsmodus zu starten.
+entrypoint: npm run start
