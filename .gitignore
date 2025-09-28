@@ -137,4 +137,3 @@ update_cloudinary_urls.sql
 UPDATGCLOUD.cmd
 deploy_strapi.cmd
 cloudinary_migration_mapping.json
-app.yaml
