@@ -7,6 +7,8 @@ entrypoint: npm run start
 env_variables:
   DATABASE_CLIENT: "postgres"
   NODE_ENV: "production"
+  # Erhöhe Body-Parser Limits für große Uploads
+  BODY_PARSER_SIZE_LIMIT: "50mb"
 
 # Secrets aus dem Secret Manager
 # Diese werden zur Laufzeit automatisch als Umgebungsvariablen verfügbar gemacht
@@ -18,3 +20,11 @@ automatic_scaling:
   min_instances: 1
   max_instances: 3
   target_cpu_utilization: 0.65
+
+# Erhöhe Request-Timeout für große Uploads (max 60 Minuten für F2)
+# WICHTIG: App Engine Standard erlaubt max 60 Sekunden!
+# Für längere Uploads brauchst du Cloud Run
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
