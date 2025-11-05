@@ -5,29 +5,57 @@ steps:
       "app",
       "deploy",
       "--quiet",
-      # Setzt den Datenbank-Client auf 'postgres', um den SQLite-Fehler zu beheben
+
+      # 1. ERZWINGT POSTGRES, um den SQLite-Fehler in App Engine zu beheben
       "--update-env-vars=DATABASE_CLIENT=postgres",
 
-      # Übergibt die Secrets sicher als Umgebungsvariablen.
-      # Der Wert $DATABASE_URL wird vom Secret Manager bezogen (durch secretEnv)
-      # und direkt an App Engine weitergegeben.
-      "--update-env-vars=DATABASE_URL=$$DATABASE_URL,CLOUDINARY_NAME=$$CLOUDINARY_NAME,CLOUDINARY_KEY=$$CLOUDINARY_KEY,CLOUDINARY_SECRET=$$CLOUDINARY_SECRET"
+      # 2. INJEKTION ALLER SECRETS IN DIE APP ENGINE LAUFZEITUMGEBUNG
+      # (Secrets werden über den Secret Manager bezogen, daher $$)
+      "--update-env-vars=DATABASE_URL=$$DATABASE_URL,"
+      "CLOUDINARY_CLOUD_NAME=$$CLOUDINARY_CLOUD_NAME,"
+      "CLOUDINARY_API_KEY=$$CLOUDINARY_API_KEY,"
+      "CLOUDINARY_API_SECRET=$$CLOUDINARY_API_SECRET,"
+      "ADMIN_JWT_SECRET=$$ADMIN_JWT_SECRET,"
+      "API_TOKEN_SALT=$$API_TOKEN_SALT,"
+      "APP_KEYS=$$APP_KEYS,"
+      "JWT_SECRET=$$JWT_SECRET,"
+      "TRANSFER_TOKEN_SALT=$$TRANSFER_TOKEN_SALT"
     ]
-    # Alle Secrets, die Sie in den gcloud-Befehl injizieren wollen,
-    # müssen hier aufgeführt werden.
-    secretEnv: ['DATABASE_URL', 'CLOUDINARY_NAME', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET']
+
+    # 3. Cloud Build benötigt die Erlaubnis, diese Variablen zu laden
+    secretEnv: [
+      'DATABASE_URL',
+      'CLOUDINARY_CLOUD_NAME',
+      'CLOUDINARY_API_KEY',
+      'CLOUDINARY_API_SECRET',
+      'ADMIN_JWT_SECRET',
+      'API_TOKEN_SALT',
+      'APP_KEYS',
+      'JWT_SECRET',
+      'TRANSFER_TOKEN_SALT'
+    ]
 
 options:
   logging: CLOUD_LOGGING_ONLY
 
-# Konfiguration, die Cloud Build mitteilt, welche Secrets verwendet werden dürfen
+# 4. Definition, wo Cloud Build die Secrets findet (WICHTIG: Korrekte Projekt-ID)
 availableSecrets:
   secretManager:
     - versionName: projects/strapi-website-454221/secrets/DATABASE_URL/versions/latest
       env: DATABASE_URL
-    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_NAME/versions/latest
-      env: CLOUDINARY_NAME
-    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_KEY/versions/latest
-      env: CLOUDINARY_KEY
-    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_SECRET/versions/latest
-      env: CLOUDINARY_SECRET
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_CLOUD_NAME/versions/latest
+      env: CLOUDINARY_CLOUD_NAME
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_API_KEY/versions/latest
+      env: CLOUDINARY_API_KEY
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_API_SECRET/versions/latest
+      env: CLOUDINARY_API_SECRET
+    - versionName: projects/strapi-website-454221/secrets/ADMIN_JWT_SECRET/versions/latest
+      env: ADMIN_JWT_SECRET
+    - versionName: projects/strapi-website-454221/secrets/API_TOKEN_SALT/versions/latest
+      env: API_TOKEN_SALT
+    - versionName: projects/strapi-website-454221/secrets/APP_KEYS/versions/latest
+      env: APP_KEYS
+    - versionName: projects/strapi-website-454221/secrets/JWT_SECRET/versions/latest
+      env: JWT_SECRET
+    - versionName: projects/strapi-website-454221/secrets/TRANSFER_TOKEN_SALT/versions/latest
+      env: TRANSFER_TOKEN_SALT
