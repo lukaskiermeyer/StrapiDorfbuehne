@@ -1,21 +1,20 @@
 # cloudbuild.yaml
 steps:
   - name: "gcr.io/cloud-builders/gcloud"
-    # Fügen Sie hier Ihre Secret-Referenzen und die Umgebungsvariable für DATABASE_CLIENT hinzu
     args: [
       "app",
       "deploy",
       "--quiet",
       # Setzt den Datenbank-Client auf 'postgres', um den SQLite-Fehler zu beheben
       "--update-env-vars=DATABASE_CLIENT=postgres",
-      # Injiziert die DATABASE_URL (und andere Secrets) über den Secret Manager
-      "--update-env-vars=DATABASE_URL=$DATABASE_URL",
-      "--update-env-vars=CLOUDINARY_NAME=$CLOUDINARY_NAME",
-      "--update-env-vars=CLOUDINARY_KEY=$CLOUDINARY_KEY",
-      "--update-env-vars=CLOUDINARY_SECRET=$CLOUDINARY_SECRET"
-      # Fügen Sie alle weiteren benötigten Variablen hier hinzu!
+
+      # Übergibt die Secrets sicher als Umgebungsvariablen.
+      # Der Wert $DATABASE_URL wird vom Secret Manager bezogen (durch secretEnv)
+      # und direkt an App Engine weitergegeben.
+      "--update-env-vars=DATABASE_URL=$$DATABASE_URL,CLOUDINARY_NAME=$$CLOUDINARY_NAME,CLOUDINARY_KEY=$$CLOUDINARY_KEY,CLOUDINARY_SECRET=$$CLOUDINARY_SECRET"
     ]
-    # Wichtig: Dem Build-Prozess erlauben, auf die Secrets zuzugreifen
+    # Alle Secrets, die Sie in den gcloud-Befehl injizieren wollen,
+    # müssen hier aufgeführt werden.
     secretEnv: ['DATABASE_URL', 'CLOUDINARY_NAME', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET']
 
 options:
