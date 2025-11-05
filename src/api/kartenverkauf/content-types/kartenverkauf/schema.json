@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "kartenverkaufs",
+  "info": {
+    "singularName": "kartenverkauf",
+    "pluralName": "kartenverkaufs",
+    "displayName": "Kartenverkauf"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Titel": {
+      "type": "string"
+    },
+    "Datum": {
+      "type": "datetime"
+    },
+    "Ort": {
+      "type": "string"
+    },
+    "Beschreibung": {
+      "type": "text"
+    },
+    "TicketsOnline": {
+      "type": "boolean"
+    },
+    "ticketLink": {
+      "type": "text"
+    }
+  }
+}

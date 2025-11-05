@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bilderarchivs",
+  "info": {
+    "singularName": "bilderarchiv",
+    "pluralName": "bilderarchivs",
+    "displayName": "Bilderarchiv"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Veranstaltung": {
+      "type": "string"
+    },
+    "Bilder": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "Beschreibung": {
+      "type": "text"
+    },
+    "Jahr": {
+      "type": "integer"
+    }
+  }
+}

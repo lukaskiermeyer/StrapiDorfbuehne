@@ -1,0 +1,24 @@
+{
+  "kind": "singleType",
+  "collectionName": "vorstandschaftsfotos",
+  "info": {
+    "singularName": "vorstandschaftsfoto",
+    "pluralName": "vorstandschaftsfotos",
+    "displayName": "Vorstandschaftsfoto"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Vorstandschaftsfoto": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
