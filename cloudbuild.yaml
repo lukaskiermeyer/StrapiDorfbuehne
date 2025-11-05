@@ -23,11 +23,11 @@ options:
 # Konfiguration, die Cloud Build mitteilt, welche Secrets verwendet werden dürfen
 availableSecrets:
   secretManager:
-    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/DATABASE_URL/versions/latest
+    - versionName: projects/strapi-website-454221/secrets/DATABASE_URL/versions/latest
       env: DATABASE_URL
-    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/CLOUDINARY_NAME/versions/latest
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_NAME/versions/latest
       env: CLOUDINARY_NAME
-    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/CLOUDINARY_KEY/versions/latest
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_KEY/versions/latest
       env: CLOUDINARY_KEY
-    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/CLOUDINARY_SECRET/versions/latest
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_SECRET/versions/latest
       env: CLOUDINARY_SECRET
