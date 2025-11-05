@@ -1,16 +1,35 @@
-# cloudbuild.yaml
-# Stellt sicher, dass alle Secrets an die App Engine Umgebung übergeben werden.
 steps:
   - name: "gcr.io/cloud-builders/gcloud"
+    # Verwenden Sie 'bash' oder 'sh' und den Befehl 'entrypoint',
+    # um die Umgebungsvariablen zuerst zu setzen und dann 'gcloud' auszuführen.
+    entrypoint: "bash"
     args: [
-      "app",
-      "deploy",
-      "--quiet",
-      # Korrekte Syntax für 'gcloud app deploy' mit environment variables:
-      # Wir verwenden '$' (einfaches Dollar), damit Cloud Build den Secret-Wert
-      # direkt in den Befehl injiziert.
-      "--set-env-vars",  # Flag ist ein eigenes Argument
-      "DATABASE_CLIENT=postgres,DATABASE_URL=$DATABASE_URL,CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME,CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY,CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET,ADMIN_JWT_SECRET=$ADMIN_JWT_SECRET,API_TOKEN_SALT=$API_TOKEN_SALT,APP_KEYS=$APP_KEYS,JWT_SECRET=$JWT_SECRET,TRANSFER_TOKEN_SALT=$TRANSFER_TOKEN_SALT"
+      "-c",
+      # Setzt die Umgebungsvariablen als Shell-Variablen und übergibt sie an gcloud
+      "gcloud app deploy --quiet --set-env-vars=$(printf 'DATABASE_CLIENT=postgres,DATABASE_URL=%s,CLOUDINARY_CLOUD_NAME=%s,CLOUDINARY_API_KEY=%s,CLOUDINARY_API_SECRET=%s,ADMIN_JWT_SECRET=%s,API_TOKEN_SALT=%s,APP_KEYS=%s,JWT_SECRET=%s,TRANSFER_TOKEN_SALT=%s' "
+      "$DATABASE_URL"
+      "$CLOUDINARY_CLOUD_NAME"
+      "$CLOUDINARY_API_KEY"
+      "$CLOUDINARY_API_SECRET"
+      "$ADMIN_JWT_SECRET"
+      "$API_TOKEN_SALT"
+      "$APP_KEYS"
+      "$JWT_SECRET"
+      "$TRANSFER_TOKEN_SALT"
+      ")"
+    ]
+
+    # Der Rest der Datei bleibt gleich (secretEnv und availableSecrets)
+    secretEnv: [
+      'DATABASE_URL',
+      'CLOUDINARY_CLOUD_NAME',
+      'CLOUDINARY_API_KEY',
+      'CLOUDINARY_API_SECRET',
+      'ADMIN_JWT_SECRET',
+      'API_TOKEN_SALT',
+      'APP_KEYS',
+      'JWT_SECRET',
+      'TRANSFER_TOKEN_SALT'
     ]
 
 options:
