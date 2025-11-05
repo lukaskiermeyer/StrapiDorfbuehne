@@ -1,43 +1,75 @@
 steps:
-  # Schritt 1: Build Docker Image
-  - name: 'gcr.io/cloud-builders/docker'
+  # Schritt 1: Erstelle eine .env-Datei aus den Secrets für den Build-Prozess
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
     args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/strapi:latest'
-      - '.'
+      - '-c'
+      - |
+        cat > .env <<EOF
+        DATABASE_CLIENT=postgres
+        DATABASE_URL=$$DATABASE_URL
+        CLOUDINARY_CLOUD_NAME=$$CLOUDINARY_CLOUD_NAME
+        CLOUDINARY_API_KEY=$$CLOUDINARY_API_KEY
+        CLOUDINARY_API_SECRET=$$CLOUDINARY_API_SECRET
+        ADMIN_JWT_SECRET=$$ADMIN_JWT_SECRET
+        API_TOKEN_SALT=$$API_TOKEN_SALT
+        APP_KEYS=$$APP_KEYS
+        JWT_SECRET=$$JWT_SECRET
+        TRANSFER_TOKEN_SALT=$$TRANSFER_TOKEN_SALT
+        NODE_ENV=production
+        EOF
+    secretEnv:
+      - DATABASE_URL
+      - CLOUDINARY_CLOUD_NAME
+      - CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET
+      - ADMIN_JWT_SECRET
+      - API_TOKEN_SALT
+      - APP_KEYS
+      - JWT_SECRET
+      - TRANSFER_TOKEN_SALT
 
-  # Schritt 2: Push Image zu Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
+  # Schritt 2: Installiere Dependencies (falls nötig für Build)
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
 
-  # Schritt 3: Deploy zu Cloud Run mit Secrets
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
+  # Schritt 3: Build Strapi (falls du einen Build-Step hast)
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+    env:
+      - 'NODE_ENV=production'
+
+  # Schritt 4: Deploy zu App Engine mit Secrets
+  - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      - 'run'
+      - 'app'
       - 'deploy'
-      - 'strapi-app'
-      - '--image=gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
-      - '--region=europe-west3'
-      - '--platform=managed'
-      - '--allow-unauthenticated'
-      - '--memory=2Gi'
-      - '--cpu=2'
-      - '--min-instances=1'
-      - '--max-instances=3'
-      - '--set-env-vars=DATABASE_CLIENT=postgres,NODE_ENV=production'
-      - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,CLOUDINARY_CLOUD_NAME=CLOUDINARY_CLOUD_NAME:latest,CLOUDINARY_API_KEY=CLOUDINARY_API_KEY:latest,CLOUDINARY_API_SECRET=CLOUDINARY_API_SECRET:latest,ADMIN_JWT_SECRET=ADMIN_JWT_SECRET:latest,API_TOKEN_SALT=API_TOKEN_SALT:latest,APP_KEYS=APP_KEYS:latest,JWT_SECRET=JWT_SECRET:latest,TRANSFER_TOKEN_SALT=TRANSFER_TOKEN_SALT:latest'
-
-images:
-  - 'gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
-  - 'gcr.io/$PROJECT_ID/strapi:latest'
+      - '--quiet'
+      - '--version=$SHORT_SHA'  # Optional: Versionierung
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+# WICHTIG: Hier muss die PROJEKT-ID stehen, nicht "IHR_PROJEKT_NUMMER"!
+availableSecrets:
+  secretManager:
+    - versionName: projects/strapi-website-454221/secrets/DATABASE_URL/versions/latest
+      env: DATABASE_URL
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_CLOUD_NAME/versions/latest
+      env: CLOUDINARY_CLOUD_NAME
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_API_KEY/versions/latest
+      env: CLOUDINARY_API_KEY
+    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_API_SECRET/versions/latest
+      env: CLOUDINARY_API_SECRET
+    - versionName: projects/strapi-website-454221/secrets/ADMIN_JWT_SECRET/versions/latest
+      env: ADMIN_JWT_SECRET
+    - versionName: projects/strapi-website-454221/secrets/API_TOKEN_SALT/versions/latest
+      env: API_TOKEN_SALT
+    - versionName: projects/strapi-website-454221/secrets/APP_KEYS/versions/latest
+      env: APP_KEYS
+    - versionName: projects/strapi-website-454221/secrets/JWT_SECRET/versions/latest
+      env: JWT_SECRET
+    - versionName: projects/strapi-website-454221/secrets/TRANSFER_TOKEN_SALT/versions/latest
+      env: TRANSFER_TOKEN_SALT
 
 timeout: 1600s
