@@ -1,0 +1,8 @@
+steps:
+  # Dieser eine Schritt verwendet das 'gcloud' Kommandozeilen-Tool von Google...
+  - name: "gcr.io/cloud-builders/gcloud"
+    # ... um den Befehl 'gcloud app deploy' auszuführen, der alles automatisch macht.
+    args: ["app", "deploy", "--quiet"]
+
+options:
+    logging: CLOUD_LOGGING_ONLY

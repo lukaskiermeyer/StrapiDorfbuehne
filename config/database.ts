@@ -1,34 +1,53 @@
-// Datei: database.ts
 import path from 'path';
 
-export default ({ env }) => {
-  // Der 'client'-Wert von oben wird nicht verwendet, aber es ist gut, wenn DATABASE_CLIENT nicht auf 'sqlite' gesetzt ist.
-  const client = env('DATABASE_CLIENT', 'sqlite'); 
-
-  const connections = {
-    postgres: {
+module.exports = ({ env }) => {
+  // Überprüfen, ob eine DATABASE_URL vorhanden ist (wird von Render, Neon etc. oft bereitgestellt)
+  if (env('DATABASE_URL')) {
+    const { host, port, database, user, password } = require('pg-connection-string').parse(env('DATABASE_URL'));
+    return {
       connection: {
-        // NUR die Connection String verwenden
-        connectionString: env('DATABASE_URL'), 
-        
-        // Host, Port, Database, User, Password wurden entfernt, 
-        // da sie alle in DATABASE_URL enthalten sind.
-        
-        // Beibehalten der benötigten Optionen für SSL und Schema
-        ssl: env.bool('DATABASE_SSL', true) && {
-          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', false),
+        client: 'postgres',
+        connection: {
+          host,
+          port,
+          database,
+          user,
+          password,
+          ssl: { rejectUnauthorized: false }, // Wichtig für die meisten Cloud-DBs
         },
-        schema: env('DATABASE_SCHEMA', 'public'),
+        debug: false,
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
-    },
-  };
+    };
+  }
 
+  // Fallback auf die einzelnen Umgebungsvariablen
+  const client = env('DATABASE_CLIENT', 'sqlite');
+
+  if (client === 'sqlite') {
+    return {
+      connection: {
+        client: 'sqlite',
+        connection: {
+          filename: path.join(__dirname, '..', env('DATABASE_FILENAME', '.tmp/data.db')),
+        },
+        useNullAsDefault: true,
+      },
+    };
+  }
+
+  // Konfiguration für Postgres basierend auf einzelnen Variablen
   return {
     connection: {
       client: 'postgres',
-      ...connections.postgres,
-      acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
+      connection: {
+        host: env('DATABASE_HOST', '127.0.0.1'),
+        port: env.int('DATABASE_PORT', 5432),
+        database: env('DATABASE_NAME', 'strapi'),
+        user: env('DATABASE_USERNAME', 'strapi'),
+        password: env('DATABASE_PASSWORD', 'strapi'),
+        ssl: env.bool('DATABASE_SSL', false) ? { rejectUnauthorized: false } : false,
+      },
+      debug: false,
     },
   };
 };
