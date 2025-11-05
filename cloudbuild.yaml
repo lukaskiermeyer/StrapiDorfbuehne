@@ -1,8 +1,34 @@
+# cloudbuild.yaml
 steps:
-  # Dieser eine Schritt verwendet das 'gcloud' Kommandozeilen-Tool von Google...
   - name: "gcr.io/cloud-builders/gcloud"
-    # ... um den Befehl 'gcloud app deploy' auszuführen, der alles automatisch macht.
-    args: ["app", "deploy", "--quiet"]
+    # Fügen Sie hier Ihre Secret-Referenzen und die Umgebungsvariable für DATABASE_CLIENT hinzu
+    args: [
+      "app",
+      "deploy",
+      "--quiet",
+      # Setzt den Datenbank-Client auf 'postgres', um den SQLite-Fehler zu beheben
+      "--update-env-vars=DATABASE_CLIENT=postgres",
+      # Injiziert die DATABASE_URL (und andere Secrets) über den Secret Manager
+      "--update-env-vars=DATABASE_URL=$DATABASE_URL",
+      "--update-env-vars=CLOUDINARY_NAME=$CLOUDINARY_NAME",
+      "--update-env-vars=CLOUDINARY_KEY=$CLOUDINARY_KEY",
+      "--update-env-vars=CLOUDINARY_SECRET=$CLOUDINARY_SECRET"
+      # Fügen Sie alle weiteren benötigten Variablen hier hinzu!
+    ]
+    # Wichtig: Dem Build-Prozess erlauben, auf die Secrets zuzugreifen
+    secretEnv: ['DATABASE_URL', 'CLOUDINARY_NAME', 'CLOUDINARY_KEY', 'CLOUDINARY_SECRET']
 
 options:
-    logging: CLOUD_LOGGING_ONLY
+  logging: CLOUD_LOGGING_ONLY
+
+# Konfiguration, die Cloud Build mitteilt, welche Secrets verwendet werden dürfen
+availableSecrets:
+  secretManager:
+    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/DATABASE_URL/versions/latest
+      env: DATABASE_URL
+    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/CLOUDINARY_NAME/versions/latest
+      env: CLOUDINARY_NAME
+    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/CLOUDINARY_KEY/versions/latest
+      env: CLOUDINARY_KEY
+    - versionName: projects/IHR_PROJEKT_NUMMER/secrets/CLOUDINARY_SECRET/versions/latest
+      env: CLOUDINARY_SECRET
