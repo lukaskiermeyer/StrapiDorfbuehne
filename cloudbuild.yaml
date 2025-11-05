@@ -1,58 +1,43 @@
 steps:
-  - name: "gcr.io/cloud-builders/gcloud"
-    # Verwenden Sie 'bash' oder 'sh' und den Befehl 'entrypoint',
-    # um die Umgebungsvariablen zuerst zu setzen und dann 'gcloud' auszuführen.
-    entrypoint: "bash"
-    args: [
-      "-c",
-      # Setzt die Umgebungsvariablen als Shell-Variablen und übergibt sie an gcloud
-      "gcloud app deploy --quiet --set-env-vars=$(printf 'DATABASE_CLIENT=postgres,DATABASE_URL=%s,CLOUDINARY_CLOUD_NAME=%s,CLOUDINARY_API_KEY=%s,CLOUDINARY_API_SECRET=%s,ADMIN_JWT_SECRET=%s,API_TOKEN_SALT=%s,APP_KEYS=%s,JWT_SECRET=%s,TRANSFER_TOKEN_SALT=%s' "
-      "$DATABASE_URL"
-      "$CLOUDINARY_CLOUD_NAME"
-      "$CLOUDINARY_API_KEY"
-      "$CLOUDINARY_API_SECRET"
-      "$ADMIN_JWT_SECRET"
-      "$API_TOKEN_SALT"
-      "$APP_KEYS"
-      "$JWT_SECRET"
-      "$TRANSFER_TOKEN_SALT"
-      ")"
-    ]
+  # Schritt 1: Build Docker Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/strapi:latest'
+      - '.'
 
-    # Der Rest der Datei bleibt gleich (secretEnv und availableSecrets)
-    secretEnv: [
-      'DATABASE_URL',
-      'CLOUDINARY_CLOUD_NAME',
-      'CLOUDINARY_API_KEY',
-      'CLOUDINARY_API_SECRET',
-      'ADMIN_JWT_SECRET',
-      'API_TOKEN_SALT',
-      'APP_KEYS',
-      'JWT_SECRET',
-      'TRANSFER_TOKEN_SALT'
-    ]
+  # Schritt 2: Push Image zu Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
+
+  # Schritt 3: Deploy zu Cloud Run mit Secrets
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'strapi-app'
+      - '--image=gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
+      - '--region=europe-west3'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=2Gi'
+      - '--cpu=2'
+      - '--min-instances=1'
+      - '--max-instances=3'
+      - '--set-env-vars=DATABASE_CLIENT=postgres,NODE_ENV=production'
+      - '--set-secrets=DATABASE_URL=DATABASE_URL:latest,CLOUDINARY_CLOUD_NAME=CLOUDINARY_CLOUD_NAME:latest,CLOUDINARY_API_KEY=CLOUDINARY_API_KEY:latest,CLOUDINARY_API_SECRET=CLOUDINARY_API_SECRET:latest,ADMIN_JWT_SECRET=ADMIN_JWT_SECRET:latest,API_TOKEN_SALT=API_TOKEN_SALT:latest,APP_KEYS=APP_KEYS:latest,JWT_SECRET=JWT_SECRET:latest,TRANSFER_TOKEN_SALT=TRANSFER_TOKEN_SALT:latest'
+
+images:
+  - 'gcr.io/$PROJECT_ID/strapi:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/strapi:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
 
-# Definition der Secret-Quellen (Muss mit der Projekt-ID übereinstimmen)
-availableSecrets:
-  secretManager:
-    - versionName: projects/strapi-website-454221/secrets/DATABASE_URL/versions/latest
-      env: DATABASE_URL
-    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_CLOUD_NAME/versions/latest
-      env: CLOUDINARY_CLOUD_NAME
-    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_API_KEY/versions/latest
-      env: CLOUDINARY_API_KEY
-    - versionName: projects/strapi-website-454221/secrets/CLOUDINARY_API_SECRET/versions/latest
-      env: CLOUDINARY_API_SECRET
-    - versionName: projects/strapi-website-454221/secrets/ADMIN_JWT_SECRET/versions/latest
-      env: ADMIN_JWT_SECRET
-    - versionName: projects/strapi-website-454221/secrets/API_TOKEN_SALT/versions/latest
-      env: API_TOKEN_SALT
-    - versionName: projects/strapi-website-454221/secrets/APP_KEYS/versions/latest
-      env: APP_KEYS
-    - versionName: projects/strapi-website-454221/secrets/JWT_SECRET/versions/latest
-      env: JWT_SECRET
-    - versionName: projects/strapi-website-454221/secrets/TRANSFER_TOKEN_SALT/versions/latest
-      env: TRANSFER_TOKEN_SALT
+timeout: 1600s
