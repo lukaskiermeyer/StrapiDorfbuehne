@@ -1,27 +1,17 @@
+# cloudbuild.yaml
+# Stellt sicher, dass alle Secrets an die App Engine Umgebung übergeben werden.
 steps:
   - name: "gcr.io/cloud-builders/gcloud"
+    # Die Argumente werden als eine Liste von Strings übergeben.
     args: [
       "app",
       "deploy",
       "--quiet",
-
-      # 1. ERZWINGT POSTGRES, um den SQLite-Fehler in App Engine zu beheben
-      "--update-env-vars=DATABASE_CLIENT=postgres",
-
-      # 2. INJEKTION ALLER SECRETS IN DIE APP ENGINE LAUFZEITUMGEBUNG
-      # (Secrets werden über den Secret Manager bezogen, daher $$)
-      "--update-env-vars=DATABASE_URL=$$DATABASE_URL,"
-      "CLOUDINARY_CLOUD_NAME=$$CLOUDINARY_CLOUD_NAME,"
-      "CLOUDINARY_API_KEY=$$CLOUDINARY_API_KEY,"
-      "CLOUDINARY_API_SECRET=$$CLOUDINARY_API_SECRET,"
-      "ADMIN_JWT_SECRET=$$ADMIN_JWT_SECRET,"
-      "API_TOKEN_SALT=$$API_TOKEN_SALT,"
-      "APP_KEYS=$$APP_KEYS,"
-      "JWT_SECRET=$$JWT_SECRET,"
-      "TRANSFER_TOKEN_SALT=$$TRANSFER_TOKEN_SALT"
+      # Injiziert alle Umgebungsvariablen als einen einzigen String (ohne Zeilenumbruch)
+      "--update-env-vars=DATABASE_CLIENT=postgres,DATABASE_URL=$$DATABASE_URL,CLOUDINARY_CLOUD_NAME=$$CLOUDINARY_CLOUD_NAME,CLOUDINARY_API_KEY=$$CLOUDINARY_API_KEY,CLOUDINARY_API_SECRET=$$CLOUDINARY_API_SECRET,ADMIN_JWT_SECRET=$$ADMIN_JWT_SECRET,API_TOKEN_SALT=$$API_TOKEN_SALT,APP_KEYS=$$APP_KEYS,JWT_SECRET=$$JWT_SECRET,TRANSFER_TOKEN_SALT=$$TRANSFER_TOKEN_SALT"
     ]
 
-    # 3. Cloud Build benötigt die Erlaubnis, diese Variablen zu laden
+    # Secrets, die vom Build-Schritt zur Laufzeit verwendet werden müssen
     secretEnv: [
       'DATABASE_URL',
       'CLOUDINARY_CLOUD_NAME',
@@ -37,7 +27,7 @@ steps:
 options:
   logging: CLOUD_LOGGING_ONLY
 
-# 4. Definition, wo Cloud Build die Secrets findet (WICHTIG: Korrekte Projekt-ID)
+# Definition der Secret-Quellen (Muss mit der Projekt-ID übereinstimmen)
 availableSecrets:
   secretManager:
     - versionName: projects/strapi-website-454221/secrets/DATABASE_URL/versions/latest
