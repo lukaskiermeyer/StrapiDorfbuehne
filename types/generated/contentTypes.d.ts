@@ -649,14 +649,14 @@ export interface ApiSatzungSatzung extends Struct.SingleTypeSchema {
   };
 }
 
-export interface ApiStarbierfestStarbierfest
+export interface ApiStarkbierfestStarkbierfest
   extends Struct.CollectionTypeSchema {
-  collectionName: 'starbierfeste';
+  collectionName: 'starkbierfeste';
   info: {
     description: '';
     displayName: 'Starkbierfest';
-    pluralName: 'starbierfeste';
-    singularName: 'starbierfest';
+    pluralName: 'starkbierfeste';
+    singularName: 'starkbierfest';
   };
   options: {
     draftAndPublish: true;
@@ -675,10 +675,11 @@ export interface ApiStarbierfestStarbierfest
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::starbierfest.starbierfest'
+      'api::starkbierfest.starkbierfest'
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    Titelbild: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1366,7 +1367,7 @@ declare module '@strapi/strapi' {
       'api::links.links': ApiLinksLinks;
       'api::mitgliedsantrag.mitgliedsantrag': ApiMitgliedsantragMitgliedsantrag;
       'api::satzung.satzung': ApiSatzungSatzung;
-      'api::starbierfest.starbierfest': ApiStarbierfestStarbierfest;
+      'api::starkbierfest.starkbierfest': ApiStarkbierfestStarkbierfest;
       'api::termin.termin': ApiTerminTermin;
       'api::theaterstueck.theaterstueck': ApiTheaterstueckTheaterstueck;
       'api::unsere-geschichte.unsere-geschichte': ApiUnsereGeschichteUnsereGeschichte;
