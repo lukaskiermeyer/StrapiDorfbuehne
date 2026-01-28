@@ -1,31 +1,38 @@
 import path from 'path';
 
 export default ({ env }) => {
-  // Der 'client'-Wert von oben wird nicht verwendet, aber es ist gut, wenn DATABASE_CLIENT nicht auf 'sqlite' gesetzt ist.
-  const client = env('DATABASE_CLIENT', 'sqlite');
+  const client = env('DATABASE_CLIENT', 'postgres');
 
   const connections = {
     postgres: {
       connection: {
-        // NUR die Connection String verwenden
         connectionString: env('DATABASE_URL'),
-
-        // Host, Port, Database, User, Password wurden entfernt, 
-        // da sie alle in DATABASE_URL enthalten sind.
-
-        // Beibehalten der benötigten Optionen für SSL und Schema
         ssl: env.bool('DATABASE_SSL', true) && {
           rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', false),
         },
         schema: env('DATABASE_SCHEMA', 'public'),
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+      pool: {
+        // WICHTIG für Neon Free Tier:
+        // min: 0 bedeutet: Strapi darf alle Verbindungen schließen, wenn nichts los ist.
+        // Das verhindert "tote" Verbindungen, wenn Neon einschläft.
+        min: 0,
+        max: env.int('DATABASE_POOL_MAX', 10),
+
+        // Timeouts massiv erhöhen, damit Neon Zeit hat, aus dem "Sleep" aufzuwachen (Cold Start)
+        acquireTimeoutMillis: 60000, // Wartet bis zu 60s auf eine freie Verbindung
+        createTimeoutMillis: 60000,  // Wartet bis zu 60s, bis eine neue Verbindung steht
+
+        idleTimeoutMillis: 30000,    // Ungenutzte Verbindungen nach 30s schließen
+        reapIntervalMillis: 1000,    // Jede Sekunde prüfen, ob aufgeräumt werden muss
+        createRetryIntervalMillis: 200, // Bei Fehler schnell nochmal versuchen
+      },
     },
   };
 
   return {
     connection: {
-      client: env('DATABASE_CLIENT', 'postgres'),
+      client,
       ...connections.postgres,
       acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
