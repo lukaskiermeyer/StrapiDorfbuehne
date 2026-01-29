@@ -3,7 +3,7 @@ module.exports = ({ env }) => ({
 
   upload: {
     config: {
-      provider: 'cloudinary', // Wichtig: Ändern auf 'cloudinary'
+      provider: 'cloudinary',
       providerOptions: {
         cloud_name: env('CLOUDINARY_CLOUD_NAME'),
         api_key: env('CLOUDINARY_API_KEY'),
@@ -11,11 +11,15 @@ module.exports = ({ env }) => ({
       },
       actionOptions: {
         upload: {},
-        uploadStream: {}, // Konfiguriere hier bei Bedarf Ordner in Cloudinary etc.
+        uploadStream: {},
         delete: {},
       },
+      // Leere Breakpoints verhindern, dass Strapi versucht,
+      // Large/Medium/Small Varianten im RAM zu berechnen.
+      breakpoints: {},
+      // Optional: Optimierung deaktivieren (spart CPU/RAM)
+      sizeOptimization: true,
+      autoOrientation: true,
     },
   },
-
-  // ... andere eventuelle Plugin-Konfigurationen ...
 });
