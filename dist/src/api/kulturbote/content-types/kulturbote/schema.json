@@ -1,0 +1,27 @@
+{
+    "kind": "collectionType",
+    "collectionName": "kulturbotes",
+    "info": {
+        "singularName": "kulturbote",
+        "pluralName": "kulturbotes",
+        "displayName": "Kulturbote"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Nummer": {
+            "type": "integer"
+        },
+        "KulturbotePDF": {
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ],
+            "type": "media",
+            "multiple": false
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "kind": "singleType",
+    "collectionName": "mitgliedsantrags",
+    "info": {
+        "singularName": "mitgliedsantrag",
+        "pluralName": "mitgliedsantrags",
+        "displayName": "Mitgliedsantrag"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Mitgliedsantrag": {
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ],
+            "type": "media",
+            "multiple": false
+        }
+    }
+}

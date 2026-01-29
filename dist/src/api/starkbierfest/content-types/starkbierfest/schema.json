@@ -1,0 +1,45 @@
+{
+    "kind": "collectionType",
+    "collectionName": "starkbierfeste",
+    "info": {
+        "singularName": "starkbierfest",
+        "pluralName": "starkbierfeste",
+        "displayName": "Starkbierfest",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Jahr": {
+            "type": "integer"
+        },
+        "Bilder": {
+            "type": "media",
+            "multiple": true,
+            "required": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "Kurzbeschreibung": {
+            "type": "text"
+        },
+        "Beschreibung": {
+            "type": "richtext"
+        },
+        "Titelbild": {
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ],
+            "type": "media",
+            "multiple": false
+        }
+    }
+}

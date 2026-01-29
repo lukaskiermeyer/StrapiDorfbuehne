@@ -1,0 +1,30 @@
+{
+    "kind": "collectionType",
+    "collectionName": "vorstandschafts",
+    "info": {
+        "singularName": "vorstandschaft",
+        "pluralName": "vorstandschafts",
+        "displayName": "Vorstandschaft"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Name": {
+            "type": "string"
+        },
+        "Position": {
+            "type": "string"
+        },
+        "Bild": {
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ],
+            "type": "media",
+            "multiple": false
+        }
+    }
+}

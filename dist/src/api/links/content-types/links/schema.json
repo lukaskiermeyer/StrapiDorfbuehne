@@ -1,0 +1,20 @@
+{
+    "kind": "collectionType",
+    "collectionName": "linkss",
+    "info": {
+        "singularName": "links",
+        "pluralName": "linkss",
+        "displayName": "Links"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Name": {
+            "type": "string"
+        },
+        "Link": {
+            "type": "string"
+        }
+    }
+}

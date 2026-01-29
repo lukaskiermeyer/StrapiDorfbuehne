@@ -1,0 +1,46 @@
+{
+    "kind": "collectionType",
+    "collectionName": "theaterstuecke",
+    "info": {
+        "singularName": "theaterstueck",
+        "pluralName": "theaterstuecke",
+        "displayName": "Theaterstück",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Titel": {
+            "type": "string"
+        },
+        "Jahr": {
+            "type": "integer"
+        },
+        "Bilder": {
+            "type": "media",
+            "multiple": true,
+            "required": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "Titelbild": {
+            "type": "media",
+            "multiple": true,
+            "required": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "Beschreibung": {
+            "type": "richtext"
+        }
+    }
+}

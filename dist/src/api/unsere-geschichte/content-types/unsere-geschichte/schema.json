@@ -1,0 +1,17 @@
+{
+    "kind": "singleType",
+    "collectionName": "unsere_geschichtes",
+    "info": {
+        "singularName": "unsere-geschichte",
+        "pluralName": "unsere-geschichtes",
+        "displayName": "Unsere Geschichte"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "Geschichte": {
+            "type": "richtext"
+        }
+    }
+}
