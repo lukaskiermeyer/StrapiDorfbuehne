@@ -682,6 +682,36 @@ export interface ApiMitgliedsantragMitgliedsantrag
   };
 }
 
+export interface ApiNewsNews extends Struct.CollectionTypeSchema {
+  collectionName: 'newss';
+  info: {
+    displayName: 'News';
+    pluralName: 'newss';
+    singularName: 'news';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Link: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::news.news'> &
+      Schema.Attribute.Private;
+    Nachricht: Schema.Attribute.Text & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    Startseite: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    Titel: Schema.Attribute.String;
+    Typ: Schema.Attribute.Enumeration<['Wichtig', 'Neu', 'Info']> &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSatzungSatzung extends Struct.SingleTypeSchema {
   collectionName: 'satzungs';
   info: {
@@ -1428,6 +1458,7 @@ declare module '@strapi/strapi' {
       'api::kulturbote.kulturbote': ApiKulturboteKulturbote;
       'api::links.links': ApiLinksLinks;
       'api::mitgliedsantrag.mitgliedsantrag': ApiMitgliedsantragMitgliedsantrag;
+      'api::news.news': ApiNewsNews;
       'api::satzung.satzung': ApiSatzungSatzung;
       'api::starkbierfest.starkbierfest': ApiStarkbierfestStarkbierfest;
       'api::termin.termin': ApiTerminTermin;
