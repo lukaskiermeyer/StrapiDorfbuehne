@@ -9,6 +9,7 @@
   "options": {
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "Titel": {
       "type": "string"
@@ -27,6 +28,16 @@
     },
     "ticketLink": {
       "type": "text"
+    },
+    "InfoPDF": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }
