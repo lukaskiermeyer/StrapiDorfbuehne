@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_vorverkauf_vorverkaufs",
+  "info": {
+    "displayName": "Vorverkauf",
+    "icon": "stack"
+  },
+  "options": {},
+  "attributes": {
+    "TicketsOnline": {
+      "type": "boolean"
+    },
+    "TicketLink": {
+      "type": "string"
+    },
+    "Datum": {
+      "type": "datetime"
+    },
+    "Ort": {
+      "type": "string"
+    },
+    "Info": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

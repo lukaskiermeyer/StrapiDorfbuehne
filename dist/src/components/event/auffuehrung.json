@@ -1,0 +1,14 @@
+{
+    "collectionName": "components_event_auffuehrungs",
+    "info": {
+        "displayName": "Auffuehrung",
+        "icon": "apps"
+    },
+    "options": {},
+    "attributes": {
+        "Datum": {
+            "type": "datetime"
+        }
+    },
+    "config": {}
+}

@@ -560,41 +560,6 @@ export interface ApiJugendtheaterstueckJugendtheaterstueck
   };
 }
 
-export interface ApiKartenverkaufKartenverkauf
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'kartenverkaufs';
-  info: {
-    displayName: 'Kartenverkauf';
-    pluralName: 'kartenverkaufs';
-    singularName: 'kartenverkauf';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Beschreibung: Schema.Attribute.Text;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    Datum: Schema.Attribute.DateTime;
-    InfoPDF: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::kartenverkauf.kartenverkauf'
-    > &
-      Schema.Attribute.Private;
-    Ort: Schema.Attribute.String;
-    publishedAt: Schema.Attribute.DateTime;
-    ticketLink: Schema.Attribute.Text;
-    TicketsOnline: Schema.Attribute.Boolean;
-    Titel: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiKulturboteKulturbote extends Struct.CollectionTypeSchema {
   collectionName: 'kulturbotes';
   info: {
@@ -778,39 +743,6 @@ export interface ApiStarkbierfestStarkbierfest
   };
 }
 
-export interface ApiTerminTermin extends Struct.CollectionTypeSchema {
-  collectionName: 'termins';
-  info: {
-    description: '';
-    displayName: 'Termin';
-    pluralName: 'termins';
-    singularName: 'termin';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Beschreibung: Schema.Attribute.Text;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    Datum: Schema.Attribute.DateTime;
-    InfoPDF: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::termin.termin'
-    > &
-      Schema.Attribute.Private;
-    Ort: Schema.Attribute.String;
-    publishedAt: Schema.Attribute.DateTime;
-    Titel: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiTheaterstueckTheaterstueck
   extends Struct.CollectionTypeSchema {
   collectionName: 'theaterstuecke';
@@ -877,6 +809,42 @@ export interface ApiUnsereGeschichteUnsereGeschichte
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiVeranstaltungVeranstaltung
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'veranstaltungs';
+  info: {
+    displayName: 'Veranstaltung';
+    pluralName: 'veranstaltungs';
+    singularName: 'veranstaltung';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Beschreibung: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Flyer: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::veranstaltung.veranstaltung'
+    > &
+      Schema.Attribute.Private;
+    Ort: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    Termine: Schema.Attribute.Component<'event.auffuehrung', true>;
+    TicketLink: Schema.Attribute.String;
+    TicketsOnline: Schema.Attribute.Boolean;
+    Titel: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Vorverkauf: Schema.Attribute.Component<'vorverkauf.vorverkauf', true>;
   };
 }
 
@@ -1456,16 +1424,15 @@ declare module '@strapi/strapi' {
       'api::datenschutz.datenschutz': ApiDatenschutzDatenschutz;
       'api::impressum.impressum': ApiImpressumImpressum;
       'api::jugendtheaterstueck.jugendtheaterstueck': ApiJugendtheaterstueckJugendtheaterstueck;
-      'api::kartenverkauf.kartenverkauf': ApiKartenverkaufKartenverkauf;
       'api::kulturbote.kulturbote': ApiKulturboteKulturbote;
       'api::links.links': ApiLinksLinks;
       'api::mitgliedsantrag.mitgliedsantrag': ApiMitgliedsantragMitgliedsantrag;
       'api::news.news': ApiNewsNews;
       'api::satzung.satzung': ApiSatzungSatzung;
       'api::starkbierfest.starkbierfest': ApiStarkbierfestStarkbierfest;
-      'api::termin.termin': ApiTerminTermin;
       'api::theaterstueck.theaterstueck': ApiTheaterstueckTheaterstueck;
       'api::unsere-geschichte.unsere-geschichte': ApiUnsereGeschichteUnsereGeschichte;
+      'api::veranstaltung.veranstaltung': ApiVeranstaltungVeranstaltung;
       'api::vorstandschaft.vorstandschaft': ApiVorstandschaftVorstandschaft;
       'api::vorstandschaftsfoto.vorstandschaftsfoto': ApiVorstandschaftsfotoVorstandschaftsfoto;
       'plugin::content-releases.release': PluginContentReleasesRelease;

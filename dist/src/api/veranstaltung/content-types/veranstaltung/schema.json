@@ -1,0 +1,50 @@
+{
+    "kind": "collectionType",
+    "collectionName": "veranstaltungs",
+    "info": {
+        "singularName": "veranstaltung",
+        "pluralName": "veranstaltungs",
+        "displayName": "Veranstaltung"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "Titel": {
+            "type": "string"
+        },
+        "Beschreibung": {
+            "type": "text"
+        },
+        "Ort": {
+            "type": "string"
+        },
+        "Flyer": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "TicketsOnline": {
+            "type": "boolean"
+        },
+        "TicketLink": {
+            "type": "string"
+        },
+        "Termine": {
+            "type": "component",
+            "component": "event.auffuehrung",
+            "repeatable": true
+        },
+        "Vorverkauf": {
+            "type": "component",
+            "component": "vorverkauf.vorverkauf",
+            "repeatable": true
+        }
+    }
+}
