@@ -17,6 +17,9 @@
     "Beschreibung": {
       "type": "text"
     },
+    "Einlass": {
+      "type": "string"
+    },
     "Ort": {
       "type": "string"
     },

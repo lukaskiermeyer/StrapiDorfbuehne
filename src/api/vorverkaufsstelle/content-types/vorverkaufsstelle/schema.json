@@ -17,9 +17,6 @@
     "Adresse": {
       "type": "string"
     },
-    "Oeffnungszeiten": {
-      "type": "string"
-    },
     "Telefon": {
       "type": "string"
     },

@@ -828,6 +828,7 @@ export interface ApiVeranstaltungVeranstaltung
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    Einlass: Schema.Attribute.String;
     Flyer: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -936,7 +937,6 @@ export interface ApiVorverkaufsstelleVorverkaufsstelle
     > &
       Schema.Attribute.Private;
     Name: Schema.Attribute.String;
-    Oeffnungszeiten: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     Telefon: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;

@@ -8,7 +8,6 @@ export interface EventAuffuehrung extends Struct.ComponentSchema {
   };
   attributes: {
     Datum: Schema.Attribute.DateTime;
-    Zusatzinfo: Schema.Attribute.String;
   };
 }
 
