@@ -910,6 +910,41 @@ export interface ApiVorstandschaftsfotoVorstandschaftsfoto
   };
 }
 
+export interface ApiVorverkaufsstelleVorverkaufsstelle
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'vorverkaufsstelles';
+  info: {
+    displayName: 'Vorverkaufsstelle';
+    pluralName: 'vorverkaufsstelles';
+    singularName: 'vorverkaufsstelle';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Adresse: Schema.Attribute.String;
+    Aktiv: Schema.Attribute.Boolean;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Hinweis: Schema.Attribute.String;
+    Link: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::vorverkaufsstelle.vorverkaufsstelle'
+    > &
+      Schema.Attribute.Private;
+    Name: Schema.Attribute.String;
+    Oeffnungszeiten: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    Telefon: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1435,6 +1470,7 @@ declare module '@strapi/strapi' {
       'api::veranstaltung.veranstaltung': ApiVeranstaltungVeranstaltung;
       'api::vorstandschaft.vorstandschaft': ApiVorstandschaftVorstandschaft;
       'api::vorstandschaftsfoto.vorstandschaftsfoto': ApiVorstandschaftsfotoVorstandschaftsfoto;
+      'api::vorverkaufsstelle.vorverkaufsstelle': ApiVorverkaufsstelleVorverkaufsstelle;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

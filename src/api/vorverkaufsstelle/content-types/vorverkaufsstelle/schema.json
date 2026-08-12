@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vorverkaufsstelles",
+  "info": {
+    "singularName": "vorverkaufsstelle",
+    "pluralName": "vorverkaufsstelles",
+    "displayName": "Vorverkaufsstelle"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "Adresse": {
+      "type": "string"
+    },
+    "Oeffnungszeiten": {
+      "type": "string"
+    },
+    "Telefon": {
+      "type": "string"
+    },
+    "Link": {
+      "type": "string"
+    },
+    "Hinweis": {
+      "type": "string"
+    },
+    "Aktiv": {
+      "type": "boolean"
+    }
+  }
+}

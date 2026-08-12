@@ -8,6 +8,9 @@
   "attributes": {
     "Datum": {
       "type": "datetime"
+    },
+    "Zusatzinfo": {
+      "type": "string"
     }
   },
   "config": {}
