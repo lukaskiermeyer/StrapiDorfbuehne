@@ -1,0 +1,98 @@
+# Projektstruktur: my-strapi-project
+Pfad: my-strapi-project
+Stand: 2026-08-19
+Typ: Strapi v5 Headless CMS (Node.js) - Content Backend für Dorfbühne Theater Website
+
+## Kurzbeschreibung
+Strapi 5 Headless CMS als Content-Backend für die "Dorfbühne Astro" Website. PostgreSQL Datenbank (pg), Cloudinary für Bild-Uploads. Content-Types für alle Theater-Inhalte: Theaterstücke, Jugendtheater, Starkbierfest, Veranstaltungen, Vorstandschaft, Bilderarchiv, Kulturbote, News, Satzung, Geschichte, Vorverkaufsstellen, Impressum, Datenschutz, Links, Mitgliedsantrag. Deployment auf Render/Strapi Cloud.
+
+## Relevante Struktur
+my-strapi-project/
+├── .dockerignore
+├── .gitignore
+├── .strapi-cloud.json
+├── .strapi-updater.json
+├── Dockerfile
+├── README.md
+├── strapiREADME.md
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── run.cmd
+├── config/                        # Strapi Konfiguration
+│   ├── admin.ts
+│   ├── api.ts
+│   ├── database.ts
+│   ├── middleware.ts
+│   ├── plugins.ts
+│   └── server.ts
+├── database/
+│   └── migrations/               # DB Migrationen
+├── scripts/                       # Custom Scripts
+├── src/
+│   ├── index.ts                  # Entry Point
+│   ├── admin/                    # Admin Panel Customizations
+│   ├── components/               # Shared Components (Global)
+│   ├── extensions/               # Plugin Extensions
+│   └── api/                      # Content-Types (API Resources)
+│       ├── theaterstueck/        # Theaterstücke
+│       ├── jugendtheaterstueck/  # Jugendtheater Stücke
+│       ├── starkbierfest/        # Starkbierfest Events
+│       ├── veranstaltung/        # Allgemeine Veranstaltungen
+│       ├── vorstandschaft/       # Vorstands-Mitglieder
+│       ├── vorstandschaftsfoto/  # Vorstands-Fotos (Gruppen)
+│       ├── bilderarchiv/         # Bilder-Archiv
+│       ├── kulturbote/           # Kultur-Newsletter
+│       ├── news/                 # News/Blog Posts
+│       ├── satzung/              # Vereinssatzung
+│       ├── unsere-geschichte/    # Vereinsgeschichte
+│       ├── vorverkaufsstelle/    # Vorverkaufs-Stellen
+│       ├── impressum/            # Impressum Content
+│       ├── datenschutz/          # Datenschutz Content
+│       ├── links/                # Linksammlung
+│       └── mitgliedsantrag/      # Mitgliedsantrag Formular
+│           ├── content-types/
+│           │   └── *.json        # Schema Definition (Attributes, Relations)
+│           ├── controllers/      # Custom Controller Logic
+│           ├── routes/           # Custom Routes
+│           └── services/         # Business Logic Services
+
+## Wichtige Dateien
+- package.json: Strapi 5.33, PostgreSQL (pg), Better-SQLite3 (Dev), Cloudinary Upload Provider, React 18 Admin
+- config/database.ts: DB Connection (PostgreSQL via env vars)
+- config/plugins.ts: Cloudinary Upload Provider Config
+- src/api/*/content-types/*/schema.json: Content-Type Schemas (Felder, Relationen, Validierung)
+- src/api/*/controllers/*.ts: Custom Controller Actions (z.B. Publish/Unpublish, Custom Queries)
+- src/api/*/services/*.ts: Business Logic (Daten-Transformation, Exports, Imports)
+- src/api/*/routes/*.ts: Custom REST Endpoints (z.B. /latest, /featured)
+- Dockerfile: Containerisierung für Deployment
+- .strapi-cloud.json: Strapi Cloud Project Link
+
+## Content-Type Übersicht (src/api/)
+| Content-Type | Zweck | Schlüssel-Felder |
+|-------------|-------|-----------------|
+| theaterstueck | Theaterstücke | titel, beschreibung, bild, premiere, besetzung[], auffuehrungen[] |
+| jugendtheaterstueck | Jugendtheater | titel, altersgruppe, probetermine, leitung |
+| starkbierfest | Starkbierfest | jahr, datum, programm, bilder[], partner |
+| veranstaltung | Events | titel, datum, ort, kategorie, tickets_link |
+| vorstandschaft | Vorstand | name, amt, bild, bio, sortierung |
+| vorstandschaftsfoto | Gruppenfotos | jahr, bild, mitglieder[] |
+| bilderarchiv | Galerie | titel, bild, kategorie, jahr, event_ref |
+| kulturbote | Newsletter | ausgabe_nr, pdf, datum, thema |
+| news | News/Blog | titel, slug, excerpt, content, bild, kategorie |
+| satzung | Satzung | version, pdf, gueltig_ab |
+| unsere-geschichte | Geschichte | jahr, titel, text, bilder[] |
+| vorverkaufsstelle | VVK Stellen | name, adresse, telefon, email, oeffnungszeiten |
+| impressum/datenschutz | Legal Pages | content (Rich Text) |
+| links | Linksammlung | titel, url, kategorie, icon |
+| mitgliedsantrag | Formular | felder[], pdf_template |
+
+## Ausgeschlossene Bereiche
+- node_modules/
+- .strapi/ (Build Cache)
+- .tmp/ (Temp Build)
+- build/ (Production Build)
+- .idea/
+- database/migrations/ (nur generiert)
+- package-lock.json (nur generiert)
+- .strapi-cloud.json / .strapi-updater.json (Config)

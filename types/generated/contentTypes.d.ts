@@ -938,6 +938,7 @@ export interface ApiVorverkaufsstelleVorverkaufsstelle
       Schema.Attribute.Private;
     Name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    Sortierung: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<99>;
     Telefon: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

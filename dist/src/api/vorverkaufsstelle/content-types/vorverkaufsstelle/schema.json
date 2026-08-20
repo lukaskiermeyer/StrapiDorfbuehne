@@ -28,6 +28,10 @@
         },
         "Aktiv": {
             "type": "boolean"
+        },
+        "Sortierung": {
+            "type": "integer",
+            "default": 99
         }
     }
 }
