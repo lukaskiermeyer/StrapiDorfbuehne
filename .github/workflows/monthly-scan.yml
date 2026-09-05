@@ -1,0 +1,60 @@
+name: "Monthly Update Scan"
+
+on:
+  schedule:
+    - cron: "0 6 1 * *" # 6 AM on the 1st of every month
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  scan-and-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (Version 22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Production Audit (Critical!)
+        run: npm audit --omit=dev --json > audit-prod.json || true
+
+      - name: Dev Audit (Lower Priority)
+        run: npm audit --json > audit-dev.json || true
+
+      - name: Run NPM Outdated
+        run: npm outdated --json > outdated.json || true
+
+      - name: Check Node.js Version
+        run: |
+          NODE_VERSION=$(node --version | cut -d'v' -f2)
+          echo "NODE_VERSION=$NODE_VERSION" >> $GITHUB_ENV
+      
+      - name: Check Framework Versions
+        run: |
+          # Parse package.json
+          NEXT_VERSION=$(node -p "require('./package.json').dependencies.next || 'n/a'")
+          ASTRO_VERSION=$(node -p "require('./package.json').dependencies.astro || 'n/a'")
+          REACT_VERSION=$(node -p "require('./package.json').dependencies.react || 'n/a'")
+          echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+          echo "ASTRO_VERSION=$ASTRO_VERSION" >> $GITHUB_ENV
+          echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_ENV
+      
+      - name: Check Latest Versions
+        run: |
+          # Hole aktuelle Versionen von npm registry
+          LATEST_NEXT=$(npm view next version 2>/dev/null || echo "n/a")
+          LATEST_ASTRO=$(npm view astro version 2>/dev/null || echo "n/a")
+          echo "LATEST_NEXT=$LATEST_NEXT" >> $GITHUB_ENV
+          echo "LATEST_ASTRO=$LATEST_ASTRO" >> $GITHUB_ENV
+
+      - name: Parse and Send Report
+        run: node .github/scripts/send-report.cjs
+        env:
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+          SCAN_API_SECRET: ${{ secrets.SCAN_API_SECRET }}
+          REPO_NAME: ${{ github.repository }}
